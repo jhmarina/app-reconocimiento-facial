@@ -77,6 +77,7 @@ Este proyecto es parte del curso "Especialista en Inteligencia Artificial (IFCD1
 - [face_recognition](https://pypi.org/project/face-recognition/):  Biblioteca de reconocimiento facial basada en dlib.
 - [pickle](https://docs.python.org/3/library/pickle.html): Módulo de Python que se utiliza para serializar y deserializar objetos. Aquí se utilizará para guardar las codificaciones de las fotos de los rostros y los nombres y cargarlos cuando se ejecute en la aplicación.
 - [datetime](https://docs.python.org/3/library/datetime.html): Módulo de Python para manipular fechas y horas. 
+- [flask](https://flask.palletsprojects.com/en/3.0.x/): Microframework de Python para desarrollar aplicaciones web.
 
 ## Instalación y Ejecución
 
