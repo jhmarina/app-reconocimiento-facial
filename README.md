@@ -1,6 +1,6 @@
 # Detección y Reconocimiento Facial en Tiempo Real
 
-Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección.
+Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A ser posible y si el tiempo lo permite, estos datos quedarían también registrados en una hoja de Google Sheets.
 
 ## ¿Cómo funcionará el modelo de aprendizaje?
 
@@ -44,6 +44,7 @@ graph TD
 - Renderiza Video: El navegador del usuario renderiza el video con las detecciones superpuestas.
 - API de Detecciones: Cuando el navegador solicita las detecciones, el servidor Flask responde con un JSON que contiene las detecciones almacenadas.
 - Tabla de Detecciones en HTML: El navegador del usuario actualiza la tabla de detecciones en la interfaz web cada 5 segundos con la información recibida de la API de detecciones.
+- Detecciones agregadas a Google Sheets: Se actualiza la tabla de detecciones en Google Sheets mediante su API.
 
 ```mermaid
 graph TD
@@ -54,7 +55,7 @@ graph TD
     E -->|Envía Frames| F[Retorna Video con Detecciones]
     F -->|Renderiza Video| B
     B -->|Solicita detections| G[API de Detecciones]
-    G -->|Responde JSON| H[Tabla de Detecciones en HTML]
+    G -->|Responde JSON| H[Tabla de Detecciones en HTML / GSheets]
     G -->|Actualiza cada 5s| H
 ```
 
@@ -78,6 +79,8 @@ Este proyecto es parte del curso "Especialista en Inteligencia Artificial (IFCD1
 - [pickle](https://docs.python.org/3/library/pickle.html): Módulo de Python que se utiliza para serializar y deserializar objetos. Aquí se utilizará para guardar las codificaciones de las fotos de los rostros y los nombres y cargarlos cuando se ejecute en la aplicación.
 - [datetime](https://docs.python.org/3/library/datetime.html): Módulo de Python para manipular fechas y horas. 
 - [flask](https://flask.palletsprojects.com/en/3.0.x/): Microframework de Python para desarrollar aplicaciones web.
+- [gspread](https://docs.gspread.org/en/v6.0.0/): API de Python para Google Sheets.
+- [google-auth](https://google-auth.readthedocs.io/en/master/): Librería de Google para la autenticación con Python.
 
 ## Instalación y Ejecución
 
