@@ -1,6 +1,6 @@
 # Detección y Reconocimiento Facial en Tiempo Real
 
-Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A ser posible y si el tiempo lo permite, estos datos quedarían también registrados en una hoja de Google Sheets.
+Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A Estos datos quedarían también registrados en una hoja de Google Sheets*.
 
 ## ¿Cómo funcionará el modelo de aprendizaje?
 
@@ -39,24 +39,27 @@ graph TD
 - Servidor Flask: El servidor Flask recibe la solicitud de acceso a la web.
 - Captura de Video con OpenCV: El servidor Flask solicita el feed de video, y OpenCV captura los frames de video en tiempo real.
 - Detección y Reconocimiento Facial: Los frames de video se procesan para detectar y reconocer rostros utilizando la biblioteca face_recognition.
-- Almacena en Memoria: Las detecciones (nombre y hora) se almacenan en una lista en memoria.
+- Actualiza Detecciones: Las detecciones (nombre y hora) se almacenan en una lista en memoria.
+- Envía Datos a Google Sheets: Los datos de detección se envían a Google Sheets utilizando la API de Google Sheets.
+- Hoja de Google Sheets: Los datos se guardan en una hoja de Google Sheets.
 - Retorna Video con Detecciones: Los frames procesados se envían de vuelta al servidor Flask, que los retorna al navegador del usuario.
 - Renderiza Video: El navegador del usuario renderiza el video con las detecciones superpuestas.
 - API de Detecciones: Cuando el navegador solicita las detecciones, el servidor Flask responde con un JSON que contiene las detecciones almacenadas.
 - Tabla de Detecciones en HTML: El navegador del usuario actualiza la tabla de detecciones en la interfaz web cada 5 segundos con la información recibida de la API de detecciones.
-- Detecciones agregadas a Google Sheets: Se actualiza la tabla de detecciones en Google Sheets mediante su API.
 
 ```mermaid
 graph TD
-    A[Usuario] -->|Accede a la Web| B[Servidor Flask]
-    B -->|Solicita video_feed| C[Captura de Video con OpenCV]
-    C -->|Frames de Video| D[Detección y Reconocimiento Facial]
-    D -->|Actualiza Detecciones| E[Almacena en Memoria]
-    E -->|Envía Frames| F[Retorna Video con Detecciones]
-    F -->|Renderiza Video| B
-    B -->|Solicita detections| G[API de Detecciones]
-    G -->|Responde JSON| H[Tabla de Detecciones en HTML / GSheets]
-    G -->|Actualiza cada 5s| H
+    G[Usuario] -->|Accede a la Web| H[Servidor Flask]
+    H -->|Solicita video_feed| I[Captura de Video con OpenCV]
+    I -->|Frames de Video| J[Detección y Reconocimiento Facial]
+    J -->|Actualiza Detecciones| K[Almacena en Memoria]
+    J -->|Envía Datos| L[API de Google Sheets]
+    L -->|Guarda Datos| M[Hoja de Google Sheets]
+    K -->|Envía Frames| N[Retorna Video con Detecciones]
+    N -->|Renderiza Video| H
+    H -->|Solicita detections| O[API de Detecciones]
+    O -->|Responde JSON| P[Tabla de Detecciones en HTML]
+    O -->|Actualiza cada 5s| P
 ```
 
 ## Motivación
@@ -69,7 +72,7 @@ Este proyecto es parte del curso "Especialista en Inteligencia Artificial (IFCD1
 
 - Python 3.8
 - Docker
-- Kubernetes*
+- Kubernetes**
 
 ## Dependencias
 
@@ -106,4 +109,5 @@ tba
 
 ## Comentarios
 
-*La funcionalidad para el despliegue en Kubernetes solo se desarrollará si dispongo de suficiente tiempo para configurar un cluster.
+*La implementación de la API de Google Sheets y la funcionalidad solo se implementará si dispongo del tiempo suficiente.
+**La funcionalidad para el despliegue en Kubernetes solo se desarrollará si dispongo de suficiente tiempo para configurar un cluster.
