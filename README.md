@@ -14,6 +14,7 @@ Esta es una aplicación web que utiliza la detección y el reconocimiento facial
 - API de Detecciones: Cuando el navegador solicita las detecciones, el servidor Flask responde con un JSON que contiene las detecciones almacenadas.
 - Tabla de Detecciones en HTML: El navegador del usuario actualiza la tabla de detecciones en la interfaz web cada 5 segundos con la información recibida de la API de detecciones.
 
+```mermaid
 graph TD
     A[Usuario] -->|Accede a la Web| B[Servidor Flask]
     B -->|Solicita video_feed| C[Captura de Video con OpenCV]
@@ -24,7 +25,7 @@ graph TD
     B -->|Solicita detections| G[API de Detecciones]
     G -->|Responde JSON| H[Tabla de Detecciones en HTML]
     G -->|Actualiza cada 5s| H
-
+```
 
 ## Motivación
 
@@ -50,15 +51,23 @@ Este proyecto es parte del curso "Especialista en Inteligencia Artificial (IFCD1
 
 ### Localmente
 
+tba
+
 ### Docker
 
+tba
+
 ### Kubernetes
+
+tba
 
 ### Licencia
 
 Este proyecto está bajo la licencia Unlicense - ver el archivo LICENSE para más detalles.
 
 ## Referencias
+
+tba
 
 ## Comentarios
 
