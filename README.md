@@ -2,7 +2,38 @@
 
 Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección.
 
-## ¿Cómo funcionará la aplicación?
+## ¿Cómo funcionará el modelo de aprendizaje?
+
+- Recopilación de Datos: Se recopilan imágenes de entrenamiento de diferentes personas con sus respectivas etiquetas (nombres).
+- Preprocesamiento de Datos: Las imágenes se preprocesan, por ejemplo, ajustando su tamaño y formato.
+- Entrenamiento del Modelo:
+    - Detección de Rostros con dlib: Se utiliza dlib para detectar rostros en las imágenes.
+    - Extracción de Características: Se extraen características faciales importantes de cada rostro.
+    - Codificación de Rostros: Las características faciales se codifican en un vector de características numéricas.
+    - Comparación con Rostros Conocidos: Las codificaciones de los rostros se comparan con las codificaciones de rostros conocidos para entrenar el modelo de reconocimiento.
+- Validación del Modelo: Se valida la precisión del modelo con un conjunto de datos de validación.
+- Guardado del Modelo: El modelo entrenado (codificaciones faciales y etiquetas) se guarda en un archivo para su uso posterior.
+- Implementación en la Aplicación: El modelo guardado se implementa en la aplicación web para realizar la detección y el reconocimiento facial en tiempo real.
+
+```mermaid
+graph TD
+    A[Recopilación de Datos] --> B[Preprocesamiento de Datos]
+    B --> C[Entrenamiento del Modelo]
+    C --> D[Validación del Modelo]
+    D -->|Modelo Entrenado| E[Guardado del Modelo]
+    E --> F[Implementación en la Aplicación]
+
+    subgraph Entrenamiento del Modelo
+        C1[Detección de Rostros con dlib]
+        C2[Extracción de Características]
+        C3[Codificación de Rostros]
+        C4[Comparación con Rostros Conocidos]
+        C1 --> C2
+        C2 --> C3
+        C3 --> C4
+    end
+```
+## ¿Cómo funcionará la aplicación web?
 
 - Usuario: El usuario accede a la aplicación web desde su navegador.
 - Servidor Flask: El servidor Flask recibe la solicitud de acceso a la web.
