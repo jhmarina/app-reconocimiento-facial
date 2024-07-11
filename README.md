@@ -1,6 +1,6 @@
 # Detección y Reconocimiento Facial en Tiempo Real
 
-Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A Estos datos quedarían también registrados en una hoja de Google Sheets*.
+Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A Estos datos quedarán también registrados en una hoja de Google Sheets*.
 
 ## ¿Cómo funcionará el modelo de aprendizaje?
 
