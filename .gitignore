@@ -1,2 +1,8 @@
-# Ignorar el venv (actualizar al nombre de nuestro venv)
+# venv (actualizar al nombre de nuestro venv)
 face_recognition_env/
+
+# Archivo pkl generado por el modelo de entrenamiento
+face_encodings.pkl
+
+# Imagenes
+imagenes/*.jpg
