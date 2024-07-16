@@ -1,5 +1,8 @@
+# Especificos del sistema de archivos
+.DS_Store
+
 # venv (actualizar al nombre de nuestro venv)
-face_recognition_env/
+venv/
 
 # Archivo pkl generado por el modelo de entrenamiento
 face_encodings.pkl
