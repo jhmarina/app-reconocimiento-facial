@@ -5,7 +5,7 @@
 venv/
 
 # Archivo pkl generado por el modelo de entrenamiento
-face_encodings.pkl
+codificaciones.pkl
 
 # Imagenes
 imagenes/*.jpg

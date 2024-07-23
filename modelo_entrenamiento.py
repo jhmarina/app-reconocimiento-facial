@@ -19,10 +19,10 @@ def save_known_faces(filename, encodings, names):
 # Directorio que contiene las nuevas imágenes
 imagenes_dir = "imagenes"
 # Archivo donde se guardan las codificaciones y nombres conocidos
-encodings_file = "codificaciones.pkl"
+codificaciones = "codificaciones.pkl"
 
 # Cargar las listas existentes
-known_face_encodings, known_face_names = load_known_faces(encodings_file)
+known_face_encodings, known_face_names = load_known_faces(codificaciones)
 print(f"Codificaciones conocidas cargadas: {len(known_face_encodings)}")
 
 # Recorrer todas las nuevas imágenes en el directorio
@@ -87,5 +87,5 @@ for image_name in os.listdir(imagenes_dir):
             print(f"Error al obtener codificación facial en la imagen {image_name}: {e}")
             continue
 
-save_known_faces(encodings_file, known_face_encodings, known_face_names)
+save_known_faces(codificaciones, known_face_encodings, known_face_names)
 print("Todas las nuevas imágenes y nombres han sido añadidos exitosamente.")
