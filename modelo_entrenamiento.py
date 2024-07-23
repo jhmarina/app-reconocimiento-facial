@@ -17,18 +17,18 @@ def save_known_faces(filename, encodings, names):
         pickle.dump((encodings, names), f)
 
 # Directorio que contiene las nuevas imágenes
-new_images_dir = "imagenes"
+imagenes_dir = "imagenes"
 # Archivo donde se guardan las codificaciones y nombres conocidos
-encodings_file = "face_encodings.pkl"
+encodings_file = "codificaciones.pkl"
 
 # Cargar las listas existentes
 known_face_encodings, known_face_names = load_known_faces(encodings_file)
 print(f"Codificaciones conocidas cargadas: {len(known_face_encodings)}")
 
 # Recorrer todas las nuevas imágenes en el directorio
-for image_name in os.listdir(new_images_dir):
+for image_name in os.listdir(imagenes_dir):
     if image_name.endswith(".jpg") or image_name.endswith(".png"):
-        image_path = os.path.join(new_images_dir, image_name)
+        image_path = os.path.join(imagenes_dir, image_name)
         print(f"Procesando imagen: {image_path}")
 
         # Carga la imagen usando PIL y la convierte a RGB
