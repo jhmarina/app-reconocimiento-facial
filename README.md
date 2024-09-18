@@ -3,6 +3,8 @@
 Este proyecto es una aplicación de reconocimiento facial en tiempo real que utiliza la biblioteca `face_recognition` y otras tecnologías de IA para detectar e identificar rostros a través de una cámara web. 
 ###La aplicación está diseñada para ser desplegada fácilmente en entornos como Docker y Kubernetes.
 
+![Alt text](https://jhmarina.me/static/img/reconocimiento-facial.png)
+
 ## Índice
 - [Librerías utilizadas](#librerías-utilizadas)
 - [Descripción de los archivos](#descripción-de-los-archivos)
