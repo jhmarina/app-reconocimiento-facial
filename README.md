@@ -1,113 +1,186 @@
-# Detección y Reconocimiento Facial en Tiempo Real
+# Proyecto de Reconocimiento Facial en Tiempo Real
 
-Esta es una aplicación web que utiliza la detección y el reconocimiento facial en tiempo real. La aplicación detecta rostros utilizando un modelo preentrenado y muestra el nombre de la persona detectada junto con la hora de la detección. Estos datos serán accesibles en una página web a tiempo real. A Estos datos quedarán también registrados en una hoja de Google Sheets*.
+Este proyecto es una aplicación de reconocimiento facial en tiempo real que utiliza la biblioteca `face_recognition` y otras tecnologías de IA para detectar e identificar rostros a través de una cámara web. 
+###La aplicación está diseñada para ser desplegada fácilmente en entornos como Docker y Kubernetes.
 
-## ¿Cómo funcionará el modelo de aprendizaje?
+## Índice
+- [Librerías utilizadas](#librerías-utilizadas)
+- [Descripción de los archivos](#descripción-de-los-archivos)
+- [Instrucciones para configurar el entorno](#instrucciones-para-configurar-el-entorno)
+- [Cómo ejecutar la aplicación localmente](#cómo-ejecutar-la-aplicación-localmente)
+- [Creación del contenedor Docker](#creación-del-contenedor-docker)
+- [Despliegue en Kubernetes](#despliegue-en-kubernetes)
+- [Futuras mejoras](#futuras-mejoras)
 
-- Recopilación de Datos: Se recopilan imágenes de entrenamiento de diferentes personas con sus respectivas etiquetas (nombres).
-- Preprocesamiento de Datos: Las imágenes se preprocesan, por ejemplo, ajustando su tamaño y formato.
-- Entrenamiento del Modelo:
-    - Detección de Rostros con dlib: Se utiliza dlib para detectar rostros en las imágenes.
-    - Extracción de Características: Se extraen características faciales importantes de cada rostro.
-    - Codificación de Rostros: Las características faciales se codifican en un vector de características numéricas.
-    - Comparación con Rostros Conocidos: Las codificaciones de los rostros se comparan con las codificaciones de rostros conocidos para entrenar el modelo de reconocimiento.
-- Validación del Modelo: Se valida la precisión del modelo con un conjunto de datos de validación.
-- Guardado del Modelo: El modelo entrenado (codificaciones faciales y etiquetas) se guarda en un archivo para su uso posterior.
-- Implementación en la Aplicación: El modelo guardado se implementa en la aplicación web para realizar la detección y el reconocimiento facial en tiempo real.
+## Librerías Utilizadas
 
-```mermaid
-graph TD
-    A[Recopilación de Datos] --> B[Preprocesamiento de Datos]
-    B --> C[Entrenamiento del Modelo]
-    C --> D[Validación del Modelo]
-    D -->|Modelo Entrenado| E[Guardado del Modelo]
-    E --> F[Implementación en la Aplicación]
+1. **`face_recognition`**: Utilizada para detectar y reconocer rostros. Esta biblioteca simplifica el reconocimiento facial utilizando modelos preentrenados.
+2. **`numpy`**: Manipula las imágenes como arrays numéricos para su procesamiento.
+3. **`Pillow`**: Biblioteca de procesamiento de imágenes utilizada para cargar y transformar las imágenes antes de su procesamiento.
+4. **`pickle`**: Se utiliza para serializar y guardar las codificaciones faciales y los nombres en archivos.
+5. **`Flask`**: Framework web en Python para crear la interfaz y API que permite procesar las imágenes en tiempo real.
+6. **`gspread` y `google-auth`**: Utilizadas para conectar la aplicación a Google Sheets y registrar las detecciones de rostros.
 
-    subgraph Entrenamiento del Modelo
-        C1[Detección de Rostros con dlib]
-        C2[Extracción de Características]
-        C3[Codificación de Rostros]
-        C4[Comparación con Rostros Conocidos]
-        C1 --> C2
-        C2 --> C3
-        C3 --> C4
-    end
-```
-## ¿Cómo funcionará la aplicación web?
+## Descripción de los Archivos
 
-- Usuario: El usuario accede a la aplicación web desde su navegador.
-- Servidor Flask: El servidor Flask recibe la solicitud de acceso a la web.
-- Captura de Video con OpenCV: El servidor Flask solicita el feed de video, y OpenCV captura los frames de video en tiempo real.
-- Detección y Reconocimiento Facial: Los frames de video se procesan para detectar y reconocer rostros utilizando la biblioteca face_recognition.
-- Actualiza Detecciones: Las detecciones (nombre y hora) se almacenan en una lista en memoria.
-- Envía Datos a Google Sheets: Los datos de detección se envían a Google Sheets utilizando la API de Google Sheets.
-- Hoja de Google Sheets: Los datos se guardan en una hoja de Google Sheets.
-- Retorna Video con Detecciones: Los frames procesados se envían de vuelta al servidor Flask, que los retorna al navegador del usuario.
-- Renderiza Video: El navegador del usuario renderiza el video con las detecciones superpuestas.
-- API de Detecciones: Cuando el navegador solicita las detecciones, el servidor Flask responde con un JSON que contiene las detecciones almacenadas.
-- Tabla de Detecciones en HTML: El navegador del usuario actualiza la tabla de detecciones en la interfaz web cada 5 segundos con la información recibida de la API de detecciones.
+### `app.py`
+Este archivo contiene la lógica del servidor web utilizando **Flask**. La aplicación permite:
+- **Capturar video en tiempo real** desde la cámara web.
+- **Detectar y reconocer rostros** utilizando las codificaciones faciales generadas por el archivo de entrenamiento.
+- **Registrar las detecciones** en tiempo real en una hoja de Google Sheets.
+- Proveer una interfaz de usuario para visualizar el video en tiempo real y las detecciones.
 
-```mermaid
-graph TD
-    G[Usuario] -->|Accede a la Web| H[Servidor Flask]
-    H -->|Solicita video_feed| I[Captura de Video con OpenCV]
-    I -->|Frames de Video| J[Detección y Reconocimiento Facial]
-    J -->|Actualiza Detecciones| K[Almacena en Memoria]
-    J -->|Envía Datos| L[API de Google Sheets]
-    L -->|Guarda Datos| M[Hoja de Google Sheets]
-    K -->|Envía Frames| N[Retorna Video con Detecciones]
-    N -->|Renderiza Video| H
-    H -->|Solicita detections| O[API de Detecciones]
-    O -->|Responde JSON| P[Tabla de Detecciones en HTML]
-    O -->|Actualiza cada 5s| P
+### `modelo_entrenamiento.py`
+Este script se encarga de:
+- Procesar imágenes de rostros almacenadas en el directorio `imagenes/`.
+- Extraer las **codificaciones faciales** utilizando la biblioteca `face_recognition`.
+- Guardar estas codificaciones en un archivo (`codificaciones.pkl`), que luego será utilizado por la aplicación Flask para identificar rostros en tiempo real.
+
+### `test_entrenamiento.py`
+Este archivo contiene pruebas automatizadas para verificar que el modelo de entrenamiento funcione correctamente, incluyendo:
+- Verificación de que se detectan los rostros en las imágenes de prueba.
+- Validación de que las codificaciones se almacenan correctamente en el archivo `pickle`.
+
+## Instrucciones para Configurar el Entorno
+
+### 1. Crear y Activar un Entorno Virtual en Python
+Para aislar las dependencias del proyecto, es recomendable utilizar un entorno virtual. Sigue los pasos a continuación:
+
+#### En Linux/MacOS:
+```bash
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-## Motivación
+#### En Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-Este proyecto es parte del curso "Especialista en Inteligencia Artificial (IFCD107)" y tiene como objetivo practicar y demostrar habilidades en la creación de aplicaciones de inteligencia artificial y su despliegue en contenedores y clústeres de Kubernetes*.
+## Instalar las Dependencias
+Instala las dependencias necesarias desde el archivo `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
 
-> ⚠️ Tanto los requisitos como las dependencias definidas aquí pueden cambiar a medida que pruebo conceptos y desarrollo la aplicación.
+El archivo requirements.txt debe contener:
 
-## Requisitos
+```bash
+face_recognition
+Flask
+numpy
+Pillow
+gspread
+google-auth
+opencv-python-headless
+```
 
-- Python 3.8
-- Docker
-- Kubernetes**
+## Cómo Ejecutar la Aplicación Localmente
 
-## Dependencias
+### 1. Entrenar el Modelo
+Antes de ejecutar la aplicación, necesitas procesar las imágenes y generar las codificaciones faciales. Ejecuta el script `modelo_entrenamiento.py`:
 
-- [OpenCV](https://opencv.org/): Biblioteca de Visión por Computadora.
-- [dlib](http://dlib.net/): Biblioteca de aprendizaje automático utilizada para la detección de rostros.
-- [face_recognition](https://pypi.org/project/face-recognition/):  Biblioteca de reconocimiento facial basada en dlib.
-- [pickle](https://docs.python.org/3/library/pickle.html): Módulo de Python que se utiliza para serializar y deserializar objetos. Aquí se utilizará para guardar las codificaciones de las fotos de los rostros y los nombres y cargarlos cuando se ejecute en la aplicación.
-- [datetime](https://docs.python.org/3/library/datetime.html): Módulo de Python para manipular fechas y horas. 
-- [flask](https://flask.palletsprojects.com/en/3.0.x/): Microframework de Python para desarrollar aplicaciones web.
-- [gspread](https://docs.gspread.org/en/v6.0.0/): API de Python para Google Sheets.
-- [google-auth](https://google-auth.readthedocs.io/en/master/): Librería de Google para la autenticación con Python.
+### 2. Ejecutar la Aplicación
+Una vez que el modelo esté entrenado, puedes iniciar la aplicación Flask:
 
-## Instalación y Ejecución
+```bash
+python app.py
+```
 
-### Localmente
+Luego, abre un navegador y accede a `http://localhost:5000` para ver la aplicación en acción.
 
-tba
+## Creación del Contenedor Docker
 
-### Docker
+### 1. Crear el Dockerfile
+Asegúrate de que tu directorio contenga un archivo `Dockerfile` con el siguiente contenido:
 
-tba
+```bash 
+# Utilizar una imagen base de Python
+FROM python:3.9-slim
 
-### Kubernetes
+# Establecer el directorio de trabajo
+WORKDIR /app
 
-tba
+# Copiar los archivos de la aplicación al directorio de trabajo
+COPY . .
 
-### Licencia
+# Instalar las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
 
-Este proyecto está bajo la licencia Unlicense - ver el archivo LICENSE para más detalles.
+# Exponer el puerto en el que correrá la aplicación Flask
+EXPOSE 5000
 
-## Referencias
+# Comando para ejecutar la aplicación Flask
+CMD ["python", "app.py"]
+```
 
-tba
+### 2. Construir la Imagen de Docker
+```bash
+docker build -t face-recognition-app .
+```
 
-## Comentarios
+### Ejecutar el Contenedor de Docker
+```bash
+docker run -p 5000:5000 face-recognition-app
+```
+Esto ejecutará la aplicación dentro de un contenedor Docker y estará disponible en `http://localhost:5000`.
 
-*La implementación de la API de Google Sheets y la funcionalidad solo se implementará si dispongo del tiempo suficiente.
-**La funcionalidad para el despliegue en Kubernetes solo se desarrollará si dispongo de suficiente tiempo para configurar un cluster.
+## Despliegue en Kubernetes
+Para desplegar la aplicación en un clúster de Kubernetes, sigue estos pasos:
+
+### 1.Crear el Archivo YAML de Kubernetes
+Crea un archivo `kubernetes-deployment.yaml` con el siguiente contenido:
+
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-recognition-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: face-recognition
+  template:
+    metadata:
+      labels:
+        app: face-recognition
+    spec:
+      containers:
+      - name: face-recognition
+        image: face-recognition-app:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: face-recognition-service
+spec:
+  selector:
+    app: face-recognition
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+```
+
+### 2. Desplegar en el Clúster de Kubernetes
+- Sube la imagen de Docker a un registro de contenedores (por ejemplo, Docker Hub o Google Container Registry).
+- Edita el archivo YAML para usar la imagen subida.
+- Aplica el archivo YAML en Kubernetes:
+
+```bash
+kubectl apply -f kubernetes-deployment.yaml
+```
+
+### 3. Verificar el Despliegue
+Puedes verificar que el despliegue esté funcionando con los siguientes comandos:
+
+```bash
+kubectl get deployments
+kubectl get services
+```

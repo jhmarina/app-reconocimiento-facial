@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-recognition-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: face-recognition
+  template:
+    metadata:
+      labels:
+        app: face-recognition
+    spec:
+      containers:
+      - name: face-recognition
+        image: face-recognition-app:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: face-recognition-service
+spec:
+  selector:
+    app: face-recognition
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer

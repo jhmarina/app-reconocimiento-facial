@@ -9,3 +9,6 @@ codificaciones.pkl
 
 # Imagenes
 imagenes/*.jpg
+
+# Credenciales
+credenciales.json
